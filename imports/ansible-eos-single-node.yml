@@ -3,7 +3,7 @@ repositories:
     - name: showtime
       description: Show off your automations!
       url: https://github.com/torerodev/showtime.git
-      reference: lab/ansible-eos-single-node
+      reference: main
       tags:
         - demo
         - lab
