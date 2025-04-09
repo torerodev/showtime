@@ -22,6 +22,8 @@ topology:
         ENABLE_SSH_ADMIN: "true"
       binds:
         - $PWD/data:/home/admin/data
+      exec:
+        - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/ansible-eos-single-node.yml"
 
   links:
     - endpoints: ["eos:eth1", "agw:eth1"]
