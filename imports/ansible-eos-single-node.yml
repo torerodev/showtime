@@ -1,0 +1,26 @@
+---
+repositories:
+    - name: showtime
+      description: Show off your automations!
+      url: https://github.com/torerodev/showtime.git
+      reference: lab/ansible-eos-single-node
+      tags:
+        - demo
+        - lab
+        - torero
+
+services:
+    - name: arista-backup-config 
+      type: ansible-playbook
+      description: Ansible playbook to backup Arista configurations
+      working-directory: library/ansible
+      playbooks:
+        - playbooks/arista/backup-config.yml
+      repository: showtime
+      runtime:
+        inventory:
+          - inventory/eos_single_node.yml
+      tags:
+        - arista
+        - ansible-eos-single-node
+...
