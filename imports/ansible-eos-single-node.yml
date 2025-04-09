@@ -10,16 +10,16 @@ repositories:
         - torero
 
 services:
-    - name: arista-backup-config 
+    - name: arista-eos-config-backup
       type: ansible-playbook
       description: Ansible playbook to backup Arista configurations
       working-directory: library/ansible
       playbooks:
-        - playbooks/arista/backup-config.yml
+        - playbooks/arista/backup-eos-config.yml
       repository: showtime
       runtime:
         inventory:
-          - inventory/eos_single_node.yml
+          - inventory/ansible_eos_single_node.yml
       tags:
         - arista
         - ansible-eos-single-node
