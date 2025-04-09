@@ -1,0 +1,8 @@
+---
+ansible_httpapi_use_proxy: false
+ansible_ssh_transfer_method: smart
+ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+ansible_host_key_checking: false
+ansible_paramiko_look_for_keys: False
+ansible_paramiko_host_key_auto_add: True
+...
