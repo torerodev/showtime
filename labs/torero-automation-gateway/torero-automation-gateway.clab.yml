@@ -17,4 +17,6 @@ topology:
         ENABLE_SSH_ADMIN: "true"
       binds:
         - $PWD/data:/home/admin/data
+      exec:
+        - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/opentofu-aws-ec2-webserver.yml"
 ...

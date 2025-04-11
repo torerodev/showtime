@@ -1,0 +1,39 @@
+---
+repositories:
+    - name: showtime
+      description: Show off your automations!
+      url: https://github.com/torerodev/showtime.git
+      reference: main
+      tags:
+        - demo
+        - lab
+        - torero
+
+decorators:
+    - name: deco-aws-ec2-webserver
+      schema:
+        $id: root
+        $schema: http://json-schema.org/draft-07/schema#
+        additionalProperties: false
+        properties:
+            aws_access_key:
+                type: string
+            aws_secret_key:
+                type: string
+        required:
+            - aws_access_key
+            - aws_secret_key
+        type: object
+
+services:
+    - name: aws-ec2-webserver
+      type: opentofu-plan
+      description: Host a web server on AWS EC2
+      working-directory: library/opentofu/aws-ec2-webserver
+      repository: showtime
+      decorator: deco-aws-ec2-webserver
+      tags:
+        - aws
+        - opentofu
+        - torero-automation-gateway
+...
