@@ -2,7 +2,7 @@
 name: ansible-eos-single-node
 
 mgmt:
-  network: eos-mgmt
+  network: agw-mgmt
   ipv4-subnet: 1.1.1.0/24
 
 topology:
