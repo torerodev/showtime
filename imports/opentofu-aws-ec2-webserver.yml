@@ -3,7 +3,7 @@ repositories:
     - name: showtime
       description: Show off your automations!
       url: https://github.com/torerodev/showtime.git
-      reference: lab/tofu-aws-ec2-webserver
+      reference: main
       tags:
         - demo
         - lab
