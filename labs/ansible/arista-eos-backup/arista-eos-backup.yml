@@ -1,0 +1,30 @@
+---
+name: ansible-eos-single-node
+
+mgmt:
+  network: agw-mgmt
+  ipv4-subnet: 1.1.1.0/24
+
+topology:
+  nodes:
+    eos:
+      kind: arista_ceos
+      image: ceos:4.33.2F
+      startup-config: ./config/base.cfg
+      mgmt-ipv4: 1.1.1.6
+    agw:
+      kind: linux
+      image: torerodev/torero:latest
+      mgmt-ipv4: 1.1.1.5
+      env:
+        INSTALL_OPENTOFU: "true"
+        OPENTOFU_VERSION: "1.9.0"
+        ENABLE_SSH_ADMIN: "true"
+      binds:
+        - $PWD/data:/home/admin/data
+      exec:
+        - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/ansible-eos-single-node.yml"
+
+  links:
+    - endpoints: ["eos:eth1", "agw:eth1"]
+...
