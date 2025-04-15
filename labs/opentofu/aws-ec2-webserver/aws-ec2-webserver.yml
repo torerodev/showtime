@@ -1,0 +1,22 @@
+---
+name: torero-automation-gateway
+
+mgmt:
+  network: agw-mgmt
+  ipv4-subnet: 1.1.1.0/24
+
+topology:
+  nodes:
+    agw:
+      kind: linux
+      image: torerodev/torero:latest
+      mgmt-ipv4: 1.1.1.5
+      env:
+        INSTALL_OPENTOFU: "true"
+        OPENTOFU_VERSION: "1.9.0"
+        ENABLE_SSH_ADMIN: "true"
+      binds:
+        - $PWD/data:/home/admin/data
+      exec:
+        - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/opentofu/aws-ec2-webserver.yml"
+...
