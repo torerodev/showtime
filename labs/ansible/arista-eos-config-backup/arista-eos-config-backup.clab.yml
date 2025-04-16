@@ -15,6 +15,8 @@ topology:
     agw:
       kind: linux
       image: torerodev/torero:latest
+      labels:
+        graph-icon: controller
       mgmt-ipv4: 1.1.1.5
       env:
         INSTALL_OPENTOFU: "true"
@@ -23,8 +25,10 @@ topology:
       binds:
         - $PWD/data:/home/admin/data
       exec:
-        - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/ansible/arista-eos-config-backup.yml"
+        - "runuser -u admin -- torero db import --repository
+          https://github.com/torerodev/showtime.git
+          imports/ansible/arista-eos-config-backup.yml"
 
   links:
-    - endpoints: ["eos:eth1", "agw:eth1"]
+    - endpoints: [ "eos:eth1", "agw:eth1" ]
 ...
