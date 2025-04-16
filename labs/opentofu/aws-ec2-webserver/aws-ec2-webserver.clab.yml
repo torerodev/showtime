@@ -11,6 +11,8 @@ topology:
       kind: linux
       image: torerodev/torero:latest
       mgmt-ipv4: 1.1.1.5
+      labels:
+        graph-icon: controller
       env:
         INSTALL_OPENTOFU: "true"
         OPENTOFU_VERSION: "1.9.0"
