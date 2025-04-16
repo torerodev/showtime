@@ -13,7 +13,7 @@ This project contains the following components:
 Finding examples of automation is great, but doesn't get you very far unless you have _purpose-built_ environments to run the automation against. To get the maximum value out of this project, you will need to setup the following:
 
 - [Containerlab](https://containerlab.dev/install/) - an open-source tool for building ephemeral, container-based networking labs with multi-vendor topologies. Its ephemeral nature means that labs can be easily deployed, tested, and then destroyed, making it ideal for _short-term_ experimentation and continuous integration workflows.
-- [Network OS Images](https://containerlab.dev/manual/kinds/) - Containerlab requires network operating system images _(e.g., Cisco, Arista, Juniper, Nokia)_ to run its topologies. You must obtain these images directly from the respective vendors, as they are not provided by Containerlab or Itential due to licensing restrictions. You will need to follow different steps for downloading and importing these images depending on the vendor.
+- [Network OS Images](https://containerlab.dev/manual/kinds/) - network operating system images _(e.g., Cisco, Arista, Juniper, Nokia)_ required to run Containerlab topologies. You must obtain these images directly from the respective vendors, as they are not provided by Containerlab or Itential due to licensing restrictions. You will need to follow different steps for downloading and importing these images depending on the vendor.
 
 ## 🚀 Getting Started
 Let's start out with running a basic lab to demonstrate backing up _configuration_ from an Arista device.
@@ -55,14 +55,14 @@ topology:
     # torero Automation Gateway node we can run our automations from
     agw:
       kind: linux
-      image: torerodev/torero:latest      # latest torero docker image
+      image: torerodev/torero:latest      # Latest torero docker image
       mgmt-ipv4: 1.1.1.5
       env:
-        ENABLE_SSH_ADMIN: "true"          # enable simple ssh login with admin:admin 
+        ENABLE_SSH_ADMIN: "true"          # Enable simple ssh login with admin:admin 
       binds:
         - $PWD/data:/home/admin/data
 
-      # Import automations in scope for this lab
+      # Import automations that are in scope for this lab at runtime
       exec:
         - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/ansible/arista-eos-config-backup.yml"
 
