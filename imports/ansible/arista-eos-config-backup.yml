@@ -19,7 +19,7 @@ services:
       repository: showtime
       runtime:
         inventory:
-          - inventory/ansible_eos_config_backup.yml
+          - inventory/arista_eos_config_backup.yml
       tags:
         - arista-eos-config-backup
 ...
