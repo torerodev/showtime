@@ -1,3 +1,9 @@
+# Ignore everything inside any "data" folder
+**/data/*
+
+# Don't ignore .gitkeep files
+!**/data/.gitkeep
+
 # Terraform and OpenTofu
 .terraform/
 terraform.tfstate

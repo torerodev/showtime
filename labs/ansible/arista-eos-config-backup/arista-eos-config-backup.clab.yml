@@ -1,5 +1,5 @@
 ---
-name: ansible-eos-single-node
+name: arista-eos-config-backup
 
 mgmt:
   network: agw-mgmt
@@ -7,7 +7,7 @@ mgmt:
 
 topology:
   nodes:
-    eos:
+    eos-sw-00:
       kind: arista_ceos
       image: ceos:4.33.2F
       startup-config: ./config/base.cfg
@@ -15,10 +15,10 @@ topology:
     agw:
       kind: linux
       image: torerodev/torero:latest
+      labels:
+        graph-icon: controller
       mgmt-ipv4: 1.1.1.5
       env:
-        INSTALL_OPENTOFU: "true"
-        OPENTOFU_VERSION: "1.9.0"
         ENABLE_SSH_ADMIN: "true"
       binds:
         - $PWD/data:/home/admin/data
@@ -26,5 +26,5 @@ topology:
         - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/ansible/arista-eos-config-backup.yml"
 
   links:
-    - endpoints: ["eos:eth1", "agw:eth1"]
+    - endpoints: [ "eos-sw-00:eth1", "agw:eth1" ]
 ...
