@@ -1,5 +1,5 @@
 ---
-name: torero-automation-gateway
+name: aws-ec2-webserver
 
 mgmt:
   network: agw-mgmt
