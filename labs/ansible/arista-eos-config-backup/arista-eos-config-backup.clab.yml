@@ -7,7 +7,7 @@ mgmt:
 
 topology:
   nodes:
-    eos:
+    eos-sw-00:
       kind: arista_ceos
       image: ceos:4.33.2F
       startup-config: ./config/base.cfg
