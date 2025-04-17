@@ -47,7 +47,7 @@ topology:
   nodes:
 
     # Arista cEOS node we can test our automations against
-    eos:
+    eos-sw-00:
       kind: arista_ceos
       image: ceos:4.33.2F                 # Update with the name used when the image was imported
       startup-config: ./config/base.cfg   # Base config applied to device at startup
@@ -68,7 +68,7 @@ topology:
         - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/ansible/arista-eos-config-backup.yml"
 
   links:
-    - endpoints: [ "eos:eth1", "agw:eth1" ]
+    - endpoints: [ "eos-sw-00:eth1", "agw:eth1" ]
 ...
 ```
 
@@ -81,8 +81,13 @@ clab deploy -t arista-eos-config-backup.clab.yml
 
 ![deploy](./img/deploy.gif)
 
-🔍 **The Layout**
+> [!WARNING]
+> Be sure to update the _image_ name in the topology file from _ceos:4.33.2F_ to the name chosen when the image was imported.
 
+🔍 **The Layout**
+Deploying the _topology_ will instantiate the latest version of _torero_ automation gateway with _eos-sw-00_ running **4.33.2F**.
+
+![topology](./img/topology.png)
 
 ### Running the Automation
 Now that we have _deployed_ the topology, we can login to the _torero_ node and run the automation for the lab. The default login is _'admin:admin'_
