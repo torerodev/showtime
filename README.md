@@ -86,11 +86,21 @@ clab deploy -t arista-eos-config-backup.clab.yml
 > [!NOTE]
 > Be sure to update the _image_ name in the topology file from **ceos:4.33.2F** to the name chosen when the image was imported.
 
-### Running the Automation
-Now that we have _deployed_ the topology, we can login to the _torero_ node and run the automation for the lab. The default login is _'admin:admin'_
+### 🔌 Connect to torero Node
+First, let's connect to the _torero_ node via SSH with the default login _'admin:admin'_
 
 ```bash
 ssh admin@1.1.1.5
 ```
 
+### 🏎️ Run the Automation Service
+Next, we can run the service:
+
+```bash
+torero run service ansible-playbook arista-eos-config-backup
+```
+
 ![run automation](./img/run-automation.gif)
+
+## 💡 What's Next?
+Thanks for exploring! This project is designed to empower network engineers and automation enthusiasts to experiment with scalable, container-based automation workflows using Containerlab and torero. By combining ephemeral network labs with a unified automation execution layer, the possibilities are endless. We will continue to add _automation examples_ and _labs_ to the project over time.
