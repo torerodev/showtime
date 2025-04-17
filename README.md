@@ -18,6 +18,8 @@ Finding examples of automation is great, but doesn't get you very far unless you
 ## 🚀 Getting Started
 Let's start out with running a basic lab to demonstrate backing up _configuration_ from an Arista device.
 
+![topology](./img/topology.png)
+
 ### Download + Import Arista cEOS
 Follow the documentation [here](https://containerlab.dev/manual/kinds/ceos/) to download and install [Arista cEOS](https://www.arista.com/en/support/software-download). Arista requires you to create an account at https://arista.com prior to downloading any images.
 
@@ -81,13 +83,8 @@ clab deploy -t arista-eos-config-backup.clab.yml
 
 ![deploy](./img/deploy.gif)
 
-> [!WARNING]
-> Be sure to update the _image_ name in the topology file from _ceos:4.33.2F_ to the name chosen when the image was imported.
-
-🔍 **The Layout**
-Deploying the _topology_ will instantiate the latest version of _torero_ automation gateway with _eos-sw-00_ running **4.33.2F**.
-
-![topology](./img/topology.png)
+> [!NOTE]
+> Be sure to update the _image_ name in the topology file from **ceos:4.33.2F** to the name chosen when the image was imported.
 
 ### Running the Automation
 Now that we have _deployed_ the topology, we can login to the _torero_ node and run the automation for the lab. The default login is _'admin:admin'_
