@@ -1,0 +1,70 @@
+---
+name: arista-eos-bgp-basic
+
+mgmt:
+  network: agw-mgmt
+  ipv4-subnet: 1.1.1.0/24
+
+topology:
+  nodes:
+    agw:
+      kind: linux
+      image: torerodev/torero:latest
+      labels:
+        graph-icon: controller
+      mgmt-ipv4: 1.1.1.5
+      env:
+        ENABLE_SSH_ADMIN: "true"
+      binds:
+        - $PWD/data:/home/admin/data
+      exec:
+        - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/python/arista-eos-bgp-basic.yml"
+
+    eos-sw-01:
+      kind: arista_ceos
+      image: ceos:4.33.2F
+      labels:
+        graph-icon: switch
+      startup-config: ./config/eos-sw-01.cfg
+      mgmt-ipv4: 1.1.1.6
+
+    eos-sw-02:
+      kind: arista_ceos
+      image: ceos:4.33.2F
+      labels:
+        graph-icon: switch
+      startup-config: ./config/eos-sw-02.cfg
+      mgmt-ipv4: 1.1.1.7
+
+    eos-rtr-01:
+      kind: arista_ceos
+      image: ceos:4.33.2F
+      labels:
+        graph-icon: router
+      startup-config: ./config/eos-rtr-01.cfg
+      mgmt-ipv4: 1.1.1.8
+
+    eos-rtr-02:
+      kind: arista_ceos
+      image: ceos:4.33.2F
+      labels:
+        graph-icon: router
+      startup-config: ./config/eos-rtr-02.cfg
+      mgmt-ipv4: 1.1.1.9
+
+  links:
+    # AGW to switch
+    - endpoints: ["agw:eth1", "eos-sw-01:eth1"]
+
+    # Inter-switch link
+    - endpoints: ["eos-sw-01:eth2", "eos-sw-02:eth2"]
+
+    # Switch to router links
+    - endpoints: ["eos-sw-01:eth3", "eos-rtr-01:eth1"]
+    - endpoints: ["eos-sw-01:eth4", "eos-rtr-02:eth1"]
+    - endpoints: ["eos-sw-02:eth3", "eos-rtr-01:eth2"]
+    - endpoints: ["eos-sw-02:eth4", "eos-rtr-02:eth2"]
+
+    # Direct router-to-router link for BGP peering
+    - endpoints: ["eos-rtr-01:eth3", "eos-rtr-02:eth3"]
+...

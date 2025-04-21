@@ -1,0 +1,21 @@
+---
+repositories:
+    - name: showtime
+      description: Show off your automations!
+      url: https://github.com/torerodev/showtime.git
+      reference: main
+      tags:
+        - demo
+        - lab
+        - torero
+
+services:
+    - name: arista-eos-bgp-basic
+      type: python-script
+      description: Python script to configure BGP on Arista EOS devices
+      working-directory: library/python/arista-eos-bgp-basic
+      filename: arista-eos-bgp-basic.py
+      repository: showtime
+      tags:
+        - arista-eos-bgp-basic
+...
