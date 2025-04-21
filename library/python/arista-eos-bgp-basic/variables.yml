@@ -1,0 +1,41 @@
+---
+# inventory + variables
+devices:
+  eos-rtr-01:
+    device_type: arista_eos
+    host: 1.1.1.8
+    username: admin
+    password: admin
+    secret: admin
+    conn_timeout: 10
+    fast_cli: false
+    bgp_config:
+      local_as: 65001
+      remote_as: 65002
+      neighbor_ip: 10.0.5.2    # link to eos-rtr-02
+      loopback_ip: 1.5.1.1
+  
+  eos-rtr-02:
+    device_type: arista_eos
+    host: 1.1.1.9
+    username: admin
+    password: admin
+    secret: admin
+    conn_timeout: 10
+    fast_cli: false
+    bgp_config:
+      local_as: 65002
+      remote_as: 65001
+      neighbor_ip: 10.0.5.1    # link to eos-rtr-01
+      loopback_ip: 1.5.1.2
+
+test_targets:
+  eos-rtr-01:
+    test_loopback: 1.5.1.2     # test reaching eos-rtr-02's loopback
+  eos-rtr-02:
+    test_loopback: 1.5.1.1     # test reaching eos-rtr-01's loopback
+
+settings:
+  output_dir: /home/admin/lab_output
+  bgp_convergence_wait: 15
+...
