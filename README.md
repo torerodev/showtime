@@ -51,17 +51,17 @@ topology:
     # Arista cEOS node we can test our automations against
     eos-sw-00:
       kind: arista_ceos
-      image: ceos:4.33.2F                 # Update with the name used when the image was imported
-      startup-config: ./config/base.cfg   # Base config applied to device at startup
-      mgmt-ipv4: 1.1.1.6                  # Management IP; Assigned based on inventory file
+      image: ceos:${CEOS_VERSION:=4.33.2F}               # Use ENV variable to pass version else use default
+      startup-config: ./config/base.cfg                  # Base config applied to device at startup
+      mgmt-ipv4: 1.1.1.6                                 # Management IP; Assigned based on inventory file
 
     # torero Automation Gateway node we can run our automations from
     agw:
       kind: linux
-      image: torerodev/torero:latest      # Latest torero docker image
+      image: torerodev/torero:${TORERO_VERSION:=latest}  # Use ENV variable to pass version else use default
       mgmt-ipv4: 1.1.1.5
       env:
-        ENABLE_SSH_ADMIN: "true"          # Enable simple ssh login with admin:admin 
+        ENABLE_SSH_ADMIN: "true"                         # Enable simple ssh login with admin:admin 
       binds:
         - $PWD/data:/home/admin/data
 
@@ -78,13 +78,16 @@ topology:
 Use the following command to _deploy_ the topology:
 
 ```bash
+export CEOS_VERSION=4.33.2F    # Set environment variable to use version of image you imported
+export TORERO_VERSION=latest   # Set environment variable to pull specific version from dockerhub
+
 clab deploy -t arista-eos-config-backup.clab.yml
 ```
 
 ![deploy](./img/deploy.gif)
 
 > [!NOTE]
-> Be sure to update the _image_ name in the topology file from **ceos:4.33.2F** to the name chosen when the image was imported.
+> Be sure to set environment variable for images that you have imported in your environment. You can do this prior to running the _clab depoy_ command. Example: **export CEOS_VERSION=4.33.2F**. Deploying a topology without setting environment variables will run the topology with the _default values_ set in the topology file.
 
 ### 🔌 Connect to torero Node
 First, let's connect to the _torero_ node via SSH with the default login _'admin:admin'_

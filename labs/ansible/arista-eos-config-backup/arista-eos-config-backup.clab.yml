@@ -7,14 +7,9 @@ mgmt:
 
 topology:
   nodes:
-    eos-sw-00:
-      kind: arista_ceos
-      image: ceos:4.33.2F
-      startup-config: ./config/base.cfg
-      mgmt-ipv4: 1.1.1.6
     agw:
       kind: linux
-      image: torerodev/torero:latest
+      image: torerodev/torero:${TORERO_VERSION:=latest}
       labels:
         graph-icon: controller
       mgmt-ipv4: 1.1.1.5
@@ -24,6 +19,12 @@ topology:
         - $PWD/data:/home/admin/data
       exec:
         - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/ansible/arista-eos-config-backup.yml"
+    
+    eos-sw-00:
+      kind: arista_ceos
+      image: ceos:${CEOS_VERSION:=4.33.2F}
+      startup-config: ./config/base.cfg
+      mgmt-ipv4: 1.1.1.6
 
   links:
     - endpoints: [ "eos-sw-00:eth1", "agw:eth1" ]
