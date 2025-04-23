@@ -14,7 +14,7 @@ topology:
       mgmt-ipv4: 1.1.1.6
     agw:
       kind: linux
-      image: torerodev/torero:latest
+      image: torerodev/torero:${TORERO_VERSION:=latest}
       labels:
         graph-icon: controller
       mgmt-ipv4: 1.1.1.5
