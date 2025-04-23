@@ -9,7 +9,7 @@ topology:
   nodes:
     agw:
       kind: linux
-      image: torerodev/torero:latest
+      image: torerodev/torero:${TORERO_VERSION:=latest}
       labels:
         graph-icon: controller
       mgmt-ipv4: 1.1.1.5
@@ -22,7 +22,7 @@ topology:
 
     eos-sw-01:
       kind: arista_ceos
-      image: ceos:4.33.2F
+      image: ceos:${CEOS_VERSION:=4.33.2F}
       labels:
         graph-icon: switch
       startup-config: ./config/eos-sw-01.cfg
