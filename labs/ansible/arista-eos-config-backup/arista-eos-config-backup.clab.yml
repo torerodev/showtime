@@ -9,7 +9,7 @@ topology:
   nodes:
     eos-sw-00:
       kind: arista_ceos
-      image: ceos:4.33.2F
+      image: ceos:${CEOS_VERSION:=4.33.2F}
       startup-config: ./config/base.cfg
       mgmt-ipv4: 1.1.1.6
     agw:
