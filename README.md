@@ -58,7 +58,7 @@ topology:
     # torero Automation Gateway node we can run our automations from
     agw:
       kind: linux
-      image: torerodev/torero:${TORERO_VERSION:=latest}  # Use ENV variable to pass version else use default
+      image: ghcr.io/torerodev/torero-container:${TORERO_VERSION:=latest}  # Use ENV variable to pass version else use default
       mgmt-ipv4: 1.1.1.5
       env:
         ENABLE_SSH_ADMIN: "true"                         # Enable simple ssh login with admin:admin 

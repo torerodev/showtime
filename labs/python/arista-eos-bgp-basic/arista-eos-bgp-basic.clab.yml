@@ -9,7 +9,7 @@ topology:
   nodes:
     agw:
       kind: linux
-      image: torerodev/torero:${TORERO_VERSION:=latest}
+      image: ghcr.io/torerodev/torero-container:${TORERO_VERSION:=latest}
       labels:
         graph-icon: controller
       mgmt-ipv4: 1.1.1.5
