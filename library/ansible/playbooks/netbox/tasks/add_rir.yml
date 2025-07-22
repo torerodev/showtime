@@ -1,0 +1,24 @@
+---
+- name: Ensure required RIR parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_rir.name is defined
+    fail_msg: "Missing required RIR parameters"
+
+- name: Add RIR to NetBox
+  netbox.netbox.netbox_rir:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_rir.name }}"
+      slug: "{{ netbox_rir.slug | default(netbox_rir.name | lower | replace(' ', '-')) }}"
+      description: "{{ netbox_rir.description | default(omit) }}"
+      is_private: "{{ netbox_rir.is_private | default(false) }}"
+      tags: "{{ netbox_rir.tags | default(omit) }}"
+    state: present
+  register: netbox_rir_result
+
+- name: Show RIR result
+  ansible.builtin.debug:
+    var: netbox_rir_result

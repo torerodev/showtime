@@ -1,0 +1,36 @@
+---
+- name: Ensure required IP address parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_ip_address.address is defined
+    fail_msg: "Missing required IP address parameters"
+
+- name: Add IP address to NetBox
+  netbox.netbox.netbox_ip_address:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      address: "{{ netbox_ip_address.address }}"
+      
+      vrf: "{{ netbox_ip_address.vrf | default(omit) }}"
+      tenant: "{{ netbox_ip_address.tenant | default(omit) }}"
+      status: "{{ netbox_ip_address.status | default('active') }}"
+      role: "{{ netbox_ip_address.role | default(omit) }}"
+      dns_name: "{{ netbox_ip_address.dns_name | default(omit) }}"
+      
+      assigned_object_type: "{{ netbox_ip_address.assigned_object_type | default(omit) }}"
+      assigned_object_id: "{{ netbox_ip_address.assigned_object_id | default(omit) }}"
+      assigned_object: "{{ netbox_ip_address.assigned_object | default(omit) }}"
+      nat_inside: "{{ netbox_ip_address.nat_inside | default(omit) }}"
+      
+      description: "{{ netbox_ip_address.description | default(omit) }}"
+      
+      custom_fields: "{{ netbox_ip_address.custom_fields | default(omit) }}"
+      tags: "{{ netbox_ip_address.tags | default(omit) }}"
+    state: present
+  register: netbox_ip_address_result
+
+- name: Show IP address result
+  ansible.builtin.debug:
+    var: netbox_ip_address_result

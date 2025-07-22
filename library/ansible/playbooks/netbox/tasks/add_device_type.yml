@@ -1,0 +1,39 @@
+---
+- name: Ensure required device type parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_device_type.model is defined
+      - netbox_device_type.manufacturer is defined
+    fail_msg: "Missing required device type parameters"
+
+- name: Add device type to NetBox
+  netbox.netbox.netbox_device_type:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      model: "{{ netbox_device_type.model }}"
+      manufacturer: "{{ netbox_device_type.manufacturer }}"
+      
+      slug: "{{ netbox_device_type.slug | default(netbox_device_type.model | lower | replace(' ', '-')) }}"
+      part_number: "{{ netbox_device_type.part_number | default(omit) }}"
+      u_height: "{{ netbox_device_type.u_height | default(1) }}"
+      is_full_depth: "{{ netbox_device_type.is_full_depth | default(true) }}"
+      
+      subdevice_role: "{{ netbox_device_type.subdevice_role | default(omit) }}"
+      airflow: "{{ netbox_device_type.airflow | default(omit) }}"
+      weight: "{{ netbox_device_type.weight | default(omit) }}"
+      weight_unit: "{{ netbox_device_type.weight_unit | default(omit) }}"
+      front_image: "{{ netbox_device_type.front_image | default(omit) }}"
+      rear_image: "{{ netbox_device_type.rear_image | default(omit) }}"
+      description: "{{ netbox_device_type.description | default(omit) }}"
+      comments: "{{ netbox_device_type.comments | default(omit) }}"
+      
+      custom_fields: "{{ netbox_device_type.custom_fields | default(omit) }}"
+      tags: "{{ netbox_device_type.tags | default(omit) }}"
+    state: present
+  register: netbox_device_type_result
+
+- name: Show device type result
+  ansible.builtin.debug:
+    var: netbox_device_type_result

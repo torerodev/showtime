@@ -1,0 +1,24 @@
+---
+- name: Ensure required tag parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_tag.name is defined
+    fail_msg: "Missing required tag parameters"
+
+- name: Add tag to NetBox
+  netbox.netbox.netbox_tag:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_tag.name }}"
+      slug: "{{ netbox_tag.slug | default(netbox_tag.name | lower | replace(' ', '-')) }}"
+      color: "{{ netbox_tag.color | default('9e9e9e') }}"
+      description: "{{ netbox_tag.description | default(omit) }}"
+    state: present
+  register: netbox_tag_result
+
+- name: Show tag result
+  ansible.builtin.debug:
+    var: netbox_tag_result
+...
