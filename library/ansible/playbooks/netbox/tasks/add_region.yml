@@ -1,0 +1,24 @@
+---
+- name: Ensure required region parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_region.name is defined
+    fail_msg: "Missing required region parameters"
+
+- name: Add region to NetBox
+  netbox.netbox.netbox_region:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_region.name }}"
+      slug: "{{ netbox_region.slug | default(netbox_region.name | lower | replace(' ', '-')) }}"
+      parent_region: "{{ netbox_region.parent | default(omit) }}"
+      description: "{{ netbox_region.description | default(omit) }}"
+      tags: "{{ netbox_region.tags | default(omit) }}"
+    state: present
+  register: netbox_region_result
+
+- name: Show region result
+  ansible.builtin.debug:
+    var: netbox_region_result

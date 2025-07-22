@@ -1,0 +1,36 @@
+---
+- name: Ensure required prefix parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_prefix.prefix is defined
+    fail_msg: "Missing required prefix parameters"
+
+- name: Add prefix to NetBox
+  netbox.netbox.netbox_prefix:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      prefix: "{{ netbox_prefix.prefix }}"
+      
+      site: "{{ netbox_prefix.site | default(omit) }}"
+      vrf: "{{ netbox_prefix.vrf | default(omit) }}"
+      tenant: "{{ netbox_prefix.tenant | default(omit) }}"
+      vlan: "{{ netbox_prefix.vlan | default(omit) }}"
+      status: "{{ netbox_prefix.status | default('active') }}"
+      role: "{{ netbox_prefix.role | default(omit) }}"
+      is_pool: "{{ netbox_prefix.is_pool | default(omit) }}"
+      
+      description: "{{ netbox_prefix.description | default(omit) }}"
+      
+      mark_utilized: "{{ netbox_prefix.mark_utilized | default(omit) }}"
+      
+      custom_fields: "{{ netbox_prefix.custom_fields | default(omit) }}"
+      
+      tags: "{{ netbox_prefix.tags | default(omit) }}"
+    state: present
+  register: netbox_prefix_result
+
+- name: Show prefix result
+  ansible.builtin.debug:
+    var: netbox_prefix_result
