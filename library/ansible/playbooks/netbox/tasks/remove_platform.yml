@@ -1,0 +1,20 @@
+---
+- name: Ensure required platform parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_platform.name is defined
+    fail_msg: "Missing required platform parameters"
+
+- name: Remove platform from NetBox
+  netbox.netbox.netbox_platform:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_platform.name }}"
+    state: absent
+  register: netbox_platform_result
+
+- name: Show platform removal result
+  ansible.builtin.debug:
+    var: netbox_platform_result

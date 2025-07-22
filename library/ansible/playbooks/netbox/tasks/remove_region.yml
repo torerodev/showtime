@@ -1,0 +1,20 @@
+---
+- name: Ensure required region parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_region.name is defined
+    fail_msg: "Missing required region parameters"
+
+- name: Remove region from NetBox
+  netbox.netbox.netbox_region:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_region.name }}"
+    state: absent
+  register: netbox_region_result
+
+- name: Show region removal result
+  ansible.builtin.debug:
+    var: netbox_region_result

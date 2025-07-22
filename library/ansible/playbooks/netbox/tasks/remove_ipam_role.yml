@@ -1,0 +1,20 @@
+---
+- name: Ensure required IPAM role parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_ipam_role.name is defined
+    fail_msg: "Missing required IPAM role parameters"
+
+- name: Remove IPAM role from NetBox
+  netbox.netbox.netbox_ipam_role:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_ipam_role.name }}"
+    state: absent
+  register: netbox_ipam_role_result
+
+- name: Show IPAM role removal result
+  ansible.builtin.debug:
+    var: netbox_ipam_role_result

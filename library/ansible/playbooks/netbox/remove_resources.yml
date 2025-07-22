@@ -1,0 +1,184 @@
+---
+- name: Remove resources from NetBox
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - "../../inventory/group_vars/netbox_settings.yml"
+  vars:
+    resource_file_path: "{{ playbook_dir }}/../../resources/{{ resource_file | default('lab_network.yml') }}"
+  
+  pre_tasks:
+    - name: Check if NetBox token is set
+      ansible.builtin.fail:
+        msg: "NetBox API token not set. Please set the NETBOX_TOKEN environment variable."
+      when: not lookup('env', 'NETBOX_TOKEN')
+
+    - name: Show NetBox connection info
+      ansible.builtin.debug:
+        msg: 
+          - "NetBox URL: {{ netbox_url }}"
+          - "NetBox token is set: {{ lookup('env', 'NETBOX_TOKEN') | length > 0 }}"
+    
+    - name: Check if resource file exists
+      ansible.builtin.stat:
+        path: "{{ resource_file_path }}"
+      register: resource_file_stat
+      
+    - name: Fail if resource file doesn't exist
+      ansible.builtin.fail:
+        msg: "Resource file not found at {{ resource_file_path }}"
+      when: not resource_file_stat.stat.exists
+      
+    - name: Show resource file path
+      ansible.builtin.debug:
+        msg: "Using resource file at: {{ resource_file_path }}"
+        
+    - name: Include resource file
+      ansible.builtin.include_vars:
+        file: "{{ resource_file_path }}"
+  
+  tasks:
+    # Device interface resources
+    - name: Remove interfaces
+      include_tasks: tasks/remove_interface.yml
+      vars:
+        netbox_interface: "{{ item }}"
+      loop: "{{ netbox_interfaces | default([]) }}"
+      when: netbox_interfaces is defined
+      
+    # Device resources
+    - name: Remove devices
+      include_tasks: tasks/remove_device.yml
+      vars:
+        netbox_device: "{{ item }}"
+      loop: "{{ netbox_devices | default([]) }}"
+      when: netbox_devices is defined
+    
+    - name: Remove device types
+      include_tasks: tasks/remove_device_type.yml
+      vars:
+        netbox_device_type: "{{ item }}"
+      loop: "{{ netbox_device_types | default([]) }}"
+      when: netbox_device_types is defined
+
+    - name: Remove platforms
+      include_tasks: tasks/remove_platform.yml
+      vars:
+        netbox_platform: "{{ item }}"
+      loop: "{{ netbox_platforms | default([]) }}"
+      when: netbox_platforms is defined
+      
+    - name: Remove device roles
+      include_tasks: tasks/remove_device_role.yml
+      vars:
+        netbox_device_role: "{{ item }}"
+      loop: "{{ netbox_device_roles | default([]) }}"
+      when: netbox_device_roles is defined
+      
+    # IPAM resources
+    - name: Remove IP addresses
+      include_tasks: tasks/remove_ip_address.yml
+      vars:
+        netbox_ip_address: "{{ item }}"
+      loop: "{{ netbox_ip_addresses | default([]) }}"
+      when: netbox_ip_addresses is defined
+    
+    - name: Remove prefixes
+      include_tasks: tasks/remove_prefix.yml
+      vars:
+        netbox_prefix: "{{ item }}"
+      loop: "{{ netbox_prefixes | default([]) }}"
+      when: netbox_prefixes is defined
+    
+    - name: Remove aggregates
+      include_tasks: tasks/remove_aggregate.yml
+      vars:
+        netbox_aggregate: "{{ item }}"
+      loop: "{{ netbox_aggregates | default([]) }}"
+      when: netbox_aggregates is defined
+    
+    - name: Remove VLANs
+      include_tasks: tasks/remove_vlan.yml
+      vars:
+        netbox_vlan: "{{ item }}"
+      loop: "{{ netbox_vlans | default([]) }}"
+      when: netbox_vlans is defined
+    
+    - name: Remove VRFs
+      include_tasks: tasks/remove_vrf.yml
+      vars:
+        netbox_vrf: "{{ item }}"
+      loop: "{{ netbox_vrfs | default([]) }}"
+      when: netbox_vrfs is defined
+    
+    - name: Remove route targets
+      include_tasks: tasks/remove_route_target.yml
+      vars:
+        netbox_route_target: "{{ item }}"
+      loop: "{{ netbox_route_targets | default([]) }}"
+      when: netbox_route_targets is defined
+    
+    - name: Remove ASNs
+      include_tasks: tasks/remove_asn.yml
+      vars:
+        netbox_asn: "{{ item }}"
+      loop: "{{ netbox_asns | default([]) }}"
+      when: netbox_asns is defined
+    - name: Remove BGP ASNs
+      include_tasks: tasks/remove_bgp_asn.yml
+      vars:
+        netbox_bgp_asn: "{{ item }}"
+      loop: "{{ netbox_bgp_asns | default([]) }}"
+      when: netbox_bgp_asns is defined
+    
+    - name: Remove RIRs
+      include_tasks: tasks/remove_rir.yml
+      vars:
+        netbox_rir: "{{ item }}"
+      loop: "{{ netbox_rirs | default([]) }}"
+      when: netbox_rirs is defined
+      
+    - name: Remove IPAM roles
+      include_tasks: tasks/remove_ipam_role.yml
+      vars:
+        netbox_ipam_role: "{{ item }}"
+      loop: "{{ netbox_ipam_roles | default([]) }}"
+      when: netbox_ipam_roles is defined
+      
+    # Manufacturer and device components
+    - name: Remove manufacturers
+      include_tasks: tasks/remove_manufacturer.yml
+      vars:
+        netbox_manufacturer: "{{ item }}"
+      loop: "{{ netbox_manufacturers | default([]) }}"
+      when: netbox_manufacturers is defined
+      
+    # Organization resources (reverse order from add)
+    - name: Remove sites
+      include_tasks: tasks/remove_site.yml
+      vars:
+        netbox_site: "{{ item }}"
+      loop: "{{ netbox_sites | default([]) }}"
+      when: netbox_sites is defined
+      
+    - name: Remove tenants
+      include_tasks: tasks/remove_tenant.yml
+      vars:
+        netbox_tenant: "{{ item }}"
+      loop: "{{ netbox_tenants | default([]) }}"
+      when: netbox_tenants is defined
+      
+    - name: Remove regions
+      include_tasks: tasks/remove_region.yml
+      vars:
+        netbox_region: "{{ item }}"
+      loop: "{{ netbox_regions | default([]) }}"
+      when: netbox_regions is defined
+      
+    # Tags should be removed last since other resources may depend on them
+    - name: Remove tags
+      include_tasks: tasks/remove_tag.yml
+      vars:
+        netbox_tag: "{{ item }}"
+      loop: "{{ netbox_tags | default([]) }}"
+      when: netbox_tags is defined
