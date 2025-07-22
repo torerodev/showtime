@@ -45,3 +45,13 @@ build/
 *.swp
 *.swo
 *~
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# requirements / BRD
+requirements.md
