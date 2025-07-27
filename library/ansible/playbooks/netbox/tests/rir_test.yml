@@ -1,0 +1,11 @@
+---
+netbox_rirs:
+  - name: "ARIN"
+    slug: "arin"
+    description: "American Registry for Internet Numbers"
+    is_private: false
+  
+  - name: "RIPE NCC"
+    slug: "ripe-ncc"
+    description: "Reseaux IP Europeens Network Coordination Centre"
+    is_private: false
