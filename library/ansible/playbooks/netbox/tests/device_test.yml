@@ -1,0 +1,50 @@
+---
+netbox_manufacturers:
+  - name: "Cisco"
+    slug: "cisco"
+    description: "Cisco Systems, Inc."
+
+netbox_device_types:
+  - model: "Catalyst 9300"
+    manufacturer: "Cisco"
+    slug: "catalyst-9300"
+    u_height: 1
+    is_full_depth: true
+    description: "Cisco Catalyst 9300 Series Switch"
+
+netbox_sites:
+  - name: "Lab Site"
+    slug: "lab-site"
+    status: "active"
+    description: "Laboratory testing site"
+
+netbox_device_roles:
+  - name: "Access Switch"
+    slug: "access-switch"
+    color: "00ff00"
+    description: "Access layer switch"
+
+netbox_platforms:
+  - name: "IOS"
+    manufacturer: "Cisco"
+    slug: "ios"
+    description: "Cisco IOS Operating System"
+
+netbox_devices:
+  - name: "sw-lab-01"
+    device_type: "Catalyst 9300"
+    site: "Lab Site"
+    status: "active"
+    role: "Access Switch"
+    platform: "IOS"
+    serial: "SW001"
+    description: "Lab access switch 01"
+    
+  - name: "sw-lab-02"
+    device_type: "Catalyst 9300"
+    site: "Lab Site"
+    status: "active"
+    role: "Access Switch"
+    platform: "IOS"
+    serial: "SW002"
+    description: "Lab access switch 02"
