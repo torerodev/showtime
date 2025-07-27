@@ -29,10 +29,6 @@
         msg: "Operation aborted by user"
       when: confirmation.user_input != 'yes'
     
-    # The key is to remove resources in proper dependency order
-    # Start from leaf resources and progress to more foundational ones
-    
-    # 1. First remove any IP addresses and clean up IP address assignments
     - name: Find all IP addresses
       uri:
         url: "{{ netbox_url }}/api/ipam/ip-addresses/?limit=1000"
@@ -76,7 +72,6 @@
       ignore_errors: yes
       when: ip_addresses_response.status == 200 and ip_addresses_response.json.results | length > 0
     
-    # 2. Remove interfaces
     - name: Find all interfaces
       uri:
         url: "{{ netbox_url }}/api/dcim/interfaces/?limit=1000"
@@ -101,7 +96,6 @@
       ignore_errors: yes
       when: interfaces_response.status == 200 and interfaces_response.json.results | length > 0
       
-    # 3. Remove devices
     - name: Find all devices
       uri:
         url: "{{ netbox_url }}/api/dcim/devices/?limit=1000"
@@ -126,7 +120,6 @@
       ignore_errors: yes
       when: devices_response.status == 200 and devices_response.json.results | length > 0
       
-    # 4. Remove prefixes
     - name: Find all prefixes
       uri:
         url: "{{ netbox_url }}/api/ipam/prefixes/?limit=1000"
@@ -151,7 +144,6 @@
       ignore_errors: yes
       when: prefixes_response.status == 200 and prefixes_response.json.results | length > 0
       
-    # 5. Remove aggregates that might depend on RIRs
     - name: Find all aggregates
       uri:
         url: "{{ netbox_url }}/api/ipam/aggregates/?limit=1000"
@@ -176,7 +168,6 @@
       ignore_errors: yes
       when: aggregates_response.status == 200 and aggregates_response.json.results | length > 0
       
-    # 6. Remove VLANs
     - name: Find all VLANs
       uri:
         url: "{{ netbox_url }}/api/ipam/vlans/?limit=1000"
@@ -201,7 +192,6 @@
       ignore_errors: yes
       when: vlans_response.status == 200 and vlans_response.json.results | length > 0
     
-    # 7. Remove VRFs
     - name: Find all VRFs
       uri:
         url: "{{ netbox_url }}/api/ipam/vrfs/?limit=1000"
@@ -226,7 +216,6 @@
       ignore_errors: yes
       when: vrfs_response.status == 200 and vrfs_response.json.results | length > 0
     
-    # 8. Remove ASNs
     - name: Find all ASNs
       uri:
         url: "{{ netbox_url }}/api/ipam/asns/?limit=1000"
@@ -251,7 +240,6 @@
       ignore_errors: yes
       when: asns_response.status == 200 and asns_response.json.results | length > 0
     
-    # 9. Now we can remove device types
     - name: Find all device types
       uri:
         url: "{{ netbox_url }}/api/dcim/device-types/?limit=1000"
@@ -276,7 +264,6 @@
       ignore_errors: yes
       when: device_types_response.status == 200 and device_types_response.json.results | length > 0
     
-    # 10. Remove manufacturers
     - name: Find all manufacturers
       uri:
         url: "{{ netbox_url }}/api/dcim/manufacturers/?limit=1000"
@@ -301,7 +288,6 @@
       ignore_errors: yes
       when: manufacturers_response.status == 200 and manufacturers_response.json.results | length > 0
     
-    # 11. Remove device roles
     - name: Find all device roles
       uri:
         url: "{{ netbox_url }}/api/dcim/device-roles/?limit=1000"
@@ -326,7 +312,6 @@
       ignore_errors: yes
       when: device_roles_response.status == 200 and device_roles_response.json.results | length > 0
     
-    # 12. Remove platforms
     - name: Find all platforms
       uri:
         url: "{{ netbox_url }}/api/dcim/platforms/?limit=1000"
@@ -351,7 +336,6 @@
       ignore_errors: yes
       when: platforms_response.status == 200 and platforms_response.json.results | length > 0
     
-    # 13. Remove RIRs
     - name: Find all RIRs
       uri:
         url: "{{ netbox_url }}/api/ipam/rirs/?limit=1000"
@@ -376,7 +360,6 @@
       ignore_errors: yes
       when: rirs_response.status == 200 and rirs_response.json.results | length > 0
     
-    # 14. Remove IPAM roles
     - name: Find all IPAM roles
       uri:
         url: "{{ netbox_url }}/api/ipam/roles/?limit=1000"
@@ -401,7 +384,6 @@
       ignore_errors: yes
       when: ipam_roles_response.status == 200 and ipam_roles_response.json.results | length > 0
     
-    # 15. Remove route targets
     - name: Find all route targets
       uri:
         url: "{{ netbox_url }}/api/ipam/route-targets/?limit=1000"
@@ -426,7 +408,6 @@
       ignore_errors: yes
       when: route_targets_response.status == 200 and route_targets_response.json.results | length > 0
     
-    # 16. Remove sites
     - name: Find all sites
       uri:
         url: "{{ netbox_url }}/api/dcim/sites/?limit=1000"
