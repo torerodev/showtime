@@ -1,0 +1,68 @@
+---
+netbox_tenants:
+  - name: "Engineering"
+    slug: "engineering"
+    description: "Engineering department"
+
+netbox_sites:
+  - name: "Lab Site"
+    slug: "lab-site"
+    status: "active"
+    description: "Laboratory testing site"
+
+netbox_vrfs:
+  - name: "mgmt-vrf"
+    rd: "65000:100"
+    tenant: "Engineering"
+    description: "Management VRF"
+
+netbox_manufacturers:
+  - name: "Cisco"
+    slug: "cisco"
+    description: "Cisco Systems, Inc."
+
+netbox_device_types:
+  - model: "Catalyst 9300"
+    manufacturer: "Cisco"
+    slug: "catalyst-9300"
+    u_height: 1
+    is_full_depth: true
+    description: "Cisco Catalyst 9300 Series Switch"
+
+netbox_device_roles:
+  - name: "Access Switch"
+    slug: "access-switch"
+    color: "00ff00"
+    description: "Access layer switch"
+
+netbox_devices:
+  - name: "sw-lab-01"
+    device_type: "Catalyst 9300"
+    site: "Lab Site"
+    status: "active"
+    role: "Access Switch"
+    serial: "SW001"
+    description: "Lab access switch 01"
+
+netbox_interfaces:
+  - device: "sw-lab-01"
+    name: "Vlan100"
+    type: "virtual"
+    enabled: true
+    description: "Management interface"
+
+netbox_ip_addresses:
+  - address: "10.1.100.1/24"
+    vrf: "mgmt-vrf"
+    tenant: "Engineering"
+    status: "active"
+    assigned_object:
+      device: "sw-lab-01"
+      name: "Vlan100"
+    description: "Management IP"
+    
+  - address: "10.1.100.2/24"
+    vrf: "mgmt-vrf"
+    tenant: "Engineering"
+    status: "active"
+    description: "Secondary management IP"
