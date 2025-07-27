@@ -1,0 +1,16 @@
+---
+netbox_device_roles:
+  - name: "Core Router"
+    slug: "core-router"
+    color: "ff0000"
+    description: "Core routing infrastructure"
+    
+  - name: "Access Switch"
+    slug: "access-switch"
+    color: "00ff00"
+    description: "Access layer switch"
+    
+  - name: "Firewall"
+    slug: "firewall"
+    color: "ff8800"
+    description: "Network security appliance"
