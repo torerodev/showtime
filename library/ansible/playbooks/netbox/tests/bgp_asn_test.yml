@@ -1,0 +1,15 @@
+---
+netbox_rirs:
+  - name: "PRIVATE"
+    slug: "private"
+    description: "Private ASN ranges"
+    is_private: true
+
+netbox_bgp_asns:
+  - asn: 65001
+    rir: "private"
+    description: "BGP ASN for lab environment"
+    
+  - asn: 65002
+    rir: "private"
+    description: "BGP ASN for production"
