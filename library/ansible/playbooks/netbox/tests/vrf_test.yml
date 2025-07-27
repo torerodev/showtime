@@ -1,0 +1,16 @@
+---
+netbox_tenants:
+  - name: "Engineering"
+    slug: "engineering"
+    description: "Engineering department"
+
+netbox_vrfs:
+  - name: "mgmt-vrf"
+    rd: "65000:100"
+    tenant: "Engineering"
+    description: "Management VRF"
+    
+  - name: "prod-vrf"
+    rd: "65000:200"
+    tenant: "Engineering"
+    description: "Production VRF"

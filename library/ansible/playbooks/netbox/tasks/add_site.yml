@@ -1,0 +1,37 @@
+---
+- name: Ensure required site parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_site.name is defined
+    fail_msg: "Missing required site parameters"
+
+- name: Add site to NetBox
+  netbox.netbox.netbox_site:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_site.name }}"
+      slug: "{{ netbox_site.slug | default(netbox_site.name | lower | replace(' ', '-')) }}"
+      status: "{{ netbox_site.status | default('active') }}"
+      region: "{{ netbox_site.region | default(omit) }}"
+      tenant: "{{ netbox_site.tenant | default(omit) }}"
+      facility: "{{ netbox_site.facility | default(omit) }}"
+      asn: "{{ netbox_site.asn | default(omit) }}"
+      time_zone: "{{ netbox_site.time_zone | default(omit) }}"
+      description: "{{ netbox_site.description | default(omit) }}"
+      physical_address: "{{ netbox_site.physical_address | default(omit) }}"
+      shipping_address: "{{ netbox_site.shipping_address | default(omit) }}"
+      latitude: "{{ netbox_site.latitude | default(omit) }}"
+      longitude: "{{ netbox_site.longitude | default(omit) }}"
+      contact_name: "{{ netbox_site.contact_name | default(omit) }}"
+      contact_phone: "{{ netbox_site.contact_phone | default(omit) }}"
+      contact_email: "{{ netbox_site.contact_email | default(omit) }}"
+      comments: "{{ netbox_site.comments | default(omit) }}"
+      tags: "{{ netbox_site.tags | default(omit) }}"
+    state: present
+  register: netbox_site_result
+
+- name: Show site result
+  ansible.builtin.debug:
+    var: netbox_site_result

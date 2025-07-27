@@ -1,0 +1,15 @@
+---
+netbox_rirs:
+  - name: "ARIN"
+    slug: "arin"
+    description: "American Registry for Internet Numbers"
+    is_private: false
+
+netbox_aggregates:
+  - prefix: "10.0.0.0/8"
+    rir: "ARIN"
+    description: "Private network aggregate"
+    
+  - prefix: "192.168.0.0/16"
+    rir: "ARIN"
+    description: "Private network aggregate"

@@ -1,0 +1,31 @@
+---
+- name: Ensure required VRF parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_vrf.name is defined
+    fail_msg: "Missing required VRF parameters"
+
+- name: Add VRF to NetBox
+  netbox.netbox.netbox_vrf:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_vrf.name }}"
+      
+      rd: "{{ netbox_vrf.rd | default(omit) }}"
+      tenant: "{{ netbox_vrf.tenant | default(omit) }}"
+      enforce_unique: "{{ netbox_vrf.enforce_unique | default(true) }}"
+      description: "{{ netbox_vrf.description | default(omit) }}"
+      
+      import_targets: "{{ netbox_vrf.import_targets | default(omit) }}"
+      export_targets: "{{ netbox_vrf.export_targets | default(omit) }}"
+      
+      custom_fields: "{{ netbox_vrf.custom_fields | default(omit) }}"
+      tags: "{{ netbox_vrf.tags | default(omit) }}"
+    state: present
+  register: netbox_vrf_result
+
+- name: Show VRF result
+  ansible.builtin.debug:
+    var: netbox_vrf_result

@@ -1,0 +1,33 @@
+---
+- name: Ensure required VLAN parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_vlan.vid is defined
+      - netbox_vlan.name is defined
+    fail_msg: "Missing required VLAN parameters"
+
+- name: Add VLAN to NetBox
+  netbox.netbox.netbox_vlan:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      vid: "{{ netbox_vlan.vid }}"
+      name: "{{ netbox_vlan.name }}"
+      
+      site: "{{ netbox_vlan.site | default(omit) }}"
+      vlan_group: "{{ netbox_vlan.group | default(omit) }}"
+      tenant: "{{ netbox_vlan.tenant | default(omit) }}"
+      status: "{{ netbox_vlan.status | default('active') }}"
+      vlan_role: "{{ netbox_vlan.role | default(omit) }}"
+      description: "{{ netbox_vlan.description | default(omit) }}"
+      comments: "{{ netbox_vlan.comments | default(omit) }}"
+      
+      custom_fields: "{{ netbox_vlan.custom_fields | default(omit) }}"
+      tags: "{{ netbox_vlan.tags | default(omit) }}"
+    state: present
+  register: netbox_vlan_result
+
+- name: Show VLAN result
+  ansible.builtin.debug:
+    var: netbox_vlan_result

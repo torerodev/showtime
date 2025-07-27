@@ -1,0 +1,26 @@
+---
+netbox_sites:
+  - name: "Lab Site"
+    slug: "lab-site"
+    status: "active"
+    description: "Laboratory testing site"
+
+netbox_tenants:
+  - name: "Engineering"
+    slug: "engineering"
+    description: "Engineering department"
+
+netbox_vlans:
+  - name: "Management"
+    vid: 100
+    site: "Lab Site"
+    tenant: "Engineering"
+    status: "active"
+    description: "Management VLAN"
+    
+  - name: "Production"
+    vid: 200
+    site: "Lab Site"
+    tenant: "Engineering"
+    status: "active"
+    description: "Production VLAN"

@@ -1,0 +1,13 @@
+---
+netbox_manufacturers:
+  - name: "Cisco"
+    slug: "cisco"
+    description: "Cisco Systems, Inc."
+    
+  - name: "Juniper"
+    slug: "juniper"
+    description: "Juniper Networks"
+    
+  - name: "Arista"
+    slug: "arista"
+    description: "Arista Networks"

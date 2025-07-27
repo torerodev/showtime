@@ -1,0 +1,16 @@
+---
+netbox_manufacturers:
+  - name: "Cisco"
+    slug: "cisco"
+    description: "Cisco Systems, Inc."
+
+netbox_platforms:
+  - name: "IOS"
+    manufacturer: "Cisco"
+    slug: "ios"
+    description: "Cisco IOS Operating System"
+    
+  - name: "IOS-XE"
+    manufacturer: "Cisco"
+    slug: "ios-xe"
+    description: "Cisco IOS-XE Operating System"

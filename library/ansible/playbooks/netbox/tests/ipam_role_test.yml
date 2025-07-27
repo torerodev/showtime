@@ -1,0 +1,11 @@
+---
+netbox_ipam_roles:
+  - name: "loopback"
+    slug: "loopback"
+    weight: 1000
+    description: "Loopback interface role"
+    
+  - name: "anycast"
+    slug: "anycast"
+    weight: 2000
+    description: "Anycast address role"

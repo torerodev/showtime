@@ -1,0 +1,20 @@
+---
+- name: Ensure required device role parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_device_role.name is defined
+    fail_msg: "Missing required device role parameters"
+
+- name: Remove device role from NetBox
+  netbox.netbox.netbox_device_role:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_device_role.name }}"
+    state: absent
+  register: netbox_device_role_result
+
+- name: Show device role removal result
+  ansible.builtin.debug:
+    var: netbox_device_role_result

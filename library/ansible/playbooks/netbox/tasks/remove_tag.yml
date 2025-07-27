@@ -1,0 +1,21 @@
+---
+- name: Ensure required tag parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_tag.name is defined
+    fail_msg: "Missing required tag parameters"
+
+- name: Remove tag from NetBox
+  netbox.netbox.netbox_tag:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_tag.name }}"
+    state: absent
+  register: netbox_tag_result
+
+- name: Show tag removal result
+  ansible.builtin.debug:
+    var: netbox_tag_result
+...

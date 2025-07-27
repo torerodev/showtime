@@ -1,0 +1,18 @@
+---
+netbox_regions:
+  - name: "North America"
+    slug: "north-america"
+    description: "North American region"
+
+netbox_sites:
+  - name: "Lab Site"
+    slug: "lab-site"
+    status: "active"
+    region: "North America"
+    description: "Laboratory testing site"
+    
+  - name: "Production DC"
+    slug: "production-dc"
+    status: "active"
+    region: "North America"
+    description: "Production data center"
