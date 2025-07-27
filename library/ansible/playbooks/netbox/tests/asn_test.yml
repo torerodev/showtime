@@ -1,0 +1,22 @@
+---
+netbox_rirs:
+  - name: "ARIN"
+    slug: "arin"
+    description: "American Registry for Internet Numbers"
+    is_private: false
+
+netbox_tenants:
+  - name: "Engineering"
+    slug: "engineering"
+    description: "Engineering department"
+
+netbox_asns:
+  - asn: 65001
+    rir: "ARIN"
+    tenant: "Engineering"
+    description: "Private ASN for lab environment"
+    
+  - asn: 65002
+    rir: "ARIN"
+    tenant: "Engineering"
+    description: "Private ASN for production"
