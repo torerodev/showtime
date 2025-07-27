@@ -1,0 +1,21 @@
+---
+- name: Ensure required IP address parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_ip_address.address is defined
+    fail_msg: "Missing required IP address parameters"
+
+- name: Remove IP address from NetBox
+  netbox.netbox.netbox_ip_address:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      address: "{{ netbox_ip_address.address }}"
+      vrf: "{{ netbox_ip_address.vrf | default(omit) }}"
+    state: absent
+  register: netbox_ip_address_result
+
+- name: Show IP address removal result
+  ansible.builtin.debug:
+    var: netbox_ip_address_result

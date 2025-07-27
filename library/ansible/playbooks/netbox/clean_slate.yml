@@ -1,0 +1,510 @@
+---
+- name: Remove all resources from NetBox
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - "../../inventory/group_vars/netbox_settings.yml"
+  
+  tasks:
+    - name: Check if NetBox token is set
+      ansible.builtin.fail:
+        msg: "NetBox API token not set. Please set the NETBOX_TOKEN environment variable."
+      when: not lookup('env', 'NETBOX_TOKEN')
+
+    - name: Show NetBox connection info
+      ansible.builtin.debug:
+        msg: 
+          - "NetBox URL: {{ netbox_url }}"
+          - "Operation: Clean Slate - Removing all resources"
+          
+    - name: Confirmation prompt
+      ansible.builtin.pause:
+        prompt: |
+          WARNING: This will remove all resources from your NetBox instance.
+          Type 'yes' to continue or press Ctrl+C to abort
+      register: confirmation
+      
+    - name: Check confirmation
+      ansible.builtin.fail:
+        msg: "Operation aborted by user"
+      when: confirmation.user_input != 'yes'
+    
+    - name: Find all IP addresses
+      uri:
+        url: "{{ netbox_url }}/api/ipam/ip-addresses/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: ip_addresses_response
+      ignore_errors: yes
+      
+    - name: Set IP addresses as available first (unassign them)
+      uri:
+        url: "{{ netbox_url }}/api/ipam/ip-addresses/{{ item.id }}/"
+        method: PATCH
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Content-Type: "application/json"
+        body_format: json
+        body: |
+          {
+            "assigned_object_type": null,
+            "assigned_object_id": null
+          }
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      with_items: "{{ ip_addresses_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: ip_addresses_response.status == 200 and ip_addresses_response.json.results | length > 0
+    
+    - name: Delete IP addresses
+      uri:
+        url: "{{ netbox_url }}/api/ipam/ip-addresses/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ ip_addresses_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: ip_addresses_response.status == 200 and ip_addresses_response.json.results | length > 0
+    
+    - name: Find all interfaces
+      uri:
+        url: "{{ netbox_url }}/api/dcim/interfaces/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: interfaces_response
+      ignore_errors: yes
+      
+    - name: Delete interfaces
+      uri:
+        url: "{{ netbox_url }}/api/dcim/interfaces/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ interfaces_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: interfaces_response.status == 200 and interfaces_response.json.results | length > 0
+      
+    - name: Find all devices
+      uri:
+        url: "{{ netbox_url }}/api/dcim/devices/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: devices_response
+      ignore_errors: yes
+      
+    - name: Delete devices
+      uri:
+        url: "{{ netbox_url }}/api/dcim/devices/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ devices_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: devices_response.status == 200 and devices_response.json.results | length > 0
+      
+    - name: Find all prefixes
+      uri:
+        url: "{{ netbox_url }}/api/ipam/prefixes/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: prefixes_response
+      ignore_errors: yes
+      
+    - name: Delete prefixes
+      uri:
+        url: "{{ netbox_url }}/api/ipam/prefixes/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ prefixes_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: prefixes_response.status == 200 and prefixes_response.json.results | length > 0
+      
+    - name: Find all aggregates
+      uri:
+        url: "{{ netbox_url }}/api/ipam/aggregates/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: aggregates_response
+      ignore_errors: yes
+      
+    - name: Delete aggregates
+      uri:
+        url: "{{ netbox_url }}/api/ipam/aggregates/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ aggregates_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: aggregates_response.status == 200 and aggregates_response.json.results | length > 0
+      
+    - name: Find all VLANs
+      uri:
+        url: "{{ netbox_url }}/api/ipam/vlans/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: vlans_response
+      ignore_errors: yes
+      
+    - name: Delete VLANs
+      uri:
+        url: "{{ netbox_url }}/api/ipam/vlans/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ vlans_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: vlans_response.status == 200 and vlans_response.json.results | length > 0
+    
+    - name: Find all VRFs
+      uri:
+        url: "{{ netbox_url }}/api/ipam/vrfs/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: vrfs_response
+      ignore_errors: yes
+      
+    - name: Delete VRFs
+      uri:
+        url: "{{ netbox_url }}/api/ipam/vrfs/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ vrfs_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: vrfs_response.status == 200 and vrfs_response.json.results | length > 0
+    
+    - name: Find all ASNs
+      uri:
+        url: "{{ netbox_url }}/api/ipam/asns/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: asns_response
+      ignore_errors: yes
+      
+    - name: Delete ASNs
+      uri:
+        url: "{{ netbox_url }}/api/ipam/asns/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ asns_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: asns_response.status == 200 and asns_response.json.results | length > 0
+    
+    - name: Find all device types
+      uri:
+        url: "{{ netbox_url }}/api/dcim/device-types/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: device_types_response
+      ignore_errors: yes
+      
+    - name: Delete device types
+      uri:
+        url: "{{ netbox_url }}/api/dcim/device-types/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ device_types_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: device_types_response.status == 200 and device_types_response.json.results | length > 0
+    
+    - name: Find all manufacturers
+      uri:
+        url: "{{ netbox_url }}/api/dcim/manufacturers/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: manufacturers_response
+      ignore_errors: yes
+      
+    - name: Delete manufacturers
+      uri:
+        url: "{{ netbox_url }}/api/dcim/manufacturers/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ manufacturers_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: manufacturers_response.status == 200 and manufacturers_response.json.results | length > 0
+    
+    - name: Find all device roles
+      uri:
+        url: "{{ netbox_url }}/api/dcim/device-roles/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: device_roles_response
+      ignore_errors: yes
+      
+    - name: Delete device roles
+      uri:
+        url: "{{ netbox_url }}/api/dcim/device-roles/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ device_roles_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: device_roles_response.status == 200 and device_roles_response.json.results | length > 0
+    
+    - name: Find all platforms
+      uri:
+        url: "{{ netbox_url }}/api/dcim/platforms/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: platforms_response
+      ignore_errors: yes
+      
+    - name: Delete platforms
+      uri:
+        url: "{{ netbox_url }}/api/dcim/platforms/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ platforms_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: platforms_response.status == 200 and platforms_response.json.results | length > 0
+    
+    - name: Find all RIRs
+      uri:
+        url: "{{ netbox_url }}/api/ipam/rirs/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: rirs_response
+      ignore_errors: yes
+      
+    - name: Delete RIRs
+      uri:
+        url: "{{ netbox_url }}/api/ipam/rirs/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ rirs_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: rirs_response.status == 200 and rirs_response.json.results | length > 0
+    
+    - name: Find all IPAM roles
+      uri:
+        url: "{{ netbox_url }}/api/ipam/roles/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: ipam_roles_response
+      ignore_errors: yes
+      
+    - name: Delete IPAM roles
+      uri:
+        url: "{{ netbox_url }}/api/ipam/roles/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ ipam_roles_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: ipam_roles_response.status == 200 and ipam_roles_response.json.results | length > 0
+    
+    - name: Find all route targets
+      uri:
+        url: "{{ netbox_url }}/api/ipam/route-targets/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: route_targets_response
+      ignore_errors: yes
+      
+    - name: Delete route targets
+      uri:
+        url: "{{ netbox_url }}/api/ipam/route-targets/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ route_targets_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: route_targets_response.status == 200 and route_targets_response.json.results | length > 0
+    
+    - name: Find all sites
+      uri:
+        url: "{{ netbox_url }}/api/dcim/sites/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: sites_response
+      ignore_errors: yes
+      
+    - name: Delete sites
+      uri:
+        url: "{{ netbox_url }}/api/dcim/sites/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ sites_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: sites_response.status == 200 and sites_response.json.results | length > 0
+    
+    - name: Find all tenants
+      uri:
+        url: "{{ netbox_url }}/api/tenancy/tenants/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: tenants_response
+      ignore_errors: yes
+      
+    - name: Delete tenants
+      uri:
+        url: "{{ netbox_url }}/api/tenancy/tenants/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ tenants_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: tenants_response.status == 200 and tenants_response.json.results | length > 0
+    
+    - name: Find all regions
+      uri:
+        url: "{{ netbox_url }}/api/dcim/regions/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: regions_response
+      ignore_errors: yes
+      
+    - name: Delete regions
+      uri:
+        url: "{{ netbox_url }}/api/dcim/regions/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ regions_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: regions_response.status == 200 and regions_response.json.results | length > 0
+    
+    - name: Find all tags
+      uri:
+        url: "{{ netbox_url }}/api/extras/tags/?limit=1000"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Accept: "application/json"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [200, 404]
+      register: tags_response
+      ignore_errors: yes
+      
+    - name: Delete tags
+      uri:
+        url: "{{ netbox_url }}/api/extras/tags/{{ item.id }}/"
+        method: DELETE
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        validate_certs: "{{ netbox_validate_certs | default(false) }}"
+        status_code: [204, 404]
+      with_items: "{{ tags_response.json.results | default([]) }}"
+      ignore_errors: yes
+      when: tags_response.status == 200 and tags_response.json.results | length > 0
+
+    - name: NetBox clean slate completed
+      ansible.builtin.debug:
+        msg: "NetBox resources removal process completed. Some resources with dependencies may remain and require manual cleanup."
+...

@@ -1,0 +1,20 @@
+---
+- name: Ensure required RIR parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_rir.name is defined
+    fail_msg: "Missing required RIR parameters"
+
+- name: Remove RIR from NetBox
+  netbox.netbox.netbox_rir:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_rir.name }}"
+    state: absent
+  register: netbox_rir_result
+
+- name: Show RIR removal result
+  ansible.builtin.debug:
+    var: netbox_rir_result

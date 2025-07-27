@@ -1,0 +1,21 @@
+---
+- name: Ensure required prefix parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_prefix.prefix is defined
+    fail_msg: "Missing required prefix parameters"
+
+- name: Remove prefix from NetBox
+  netbox.netbox.netbox_prefix:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      prefix: "{{ netbox_prefix.prefix }}"
+      vrf: "{{ netbox_prefix.vrf | default(omit) }}"
+    state: absent
+  register: netbox_prefix_result
+
+- name: Show prefix removal result
+  ansible.builtin.debug:
+    var: netbox_prefix_result

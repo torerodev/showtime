@@ -1,0 +1,28 @@
+---
+- name: Ensure required device role parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_device_role.name is defined
+    fail_msg: "Missing required device role parameters"
+
+- name: Add device role to NetBox
+  netbox.netbox.netbox_device_role:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_device_role.name }}"
+      
+      slug: "{{ netbox_device_role.slug | default(netbox_device_role.name | lower | replace(' ', '-')) }}"
+      color: "{{ netbox_device_role.color | default('9e9e9e') }}"
+      vm_role: "{{ netbox_device_role.vm_role | default(false) }}"
+      description: "{{ netbox_device_role.description | default(omit) }}"
+      
+      custom_fields: "{{ netbox_device_role.custom_fields | default(omit) }}"
+      tags: "{{ netbox_device_role.tags | default(omit) }}"
+    state: present
+  register: netbox_device_role_result
+
+- name: Show device role result
+  ansible.builtin.debug:
+    var: netbox_device_role_result

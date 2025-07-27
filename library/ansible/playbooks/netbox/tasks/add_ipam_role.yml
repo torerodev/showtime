@@ -1,0 +1,25 @@
+---
+- name: Ensure required IPAM role parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_ipam_role.name is defined
+    fail_msg: "Missing required IPAM role parameters"
+
+- name: Add IPAM role to NetBox
+  netbox.netbox.netbox_ipam_role:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_ipam_role.name }}"
+      slug: "{{ netbox_ipam_role.slug | default(netbox_ipam_role.name | lower | replace(' ', '-')) }}"
+      weight: "{{ netbox_ipam_role.weight | default(omit) }}"
+      description: "{{ netbox_ipam_role.description | default(omit) }}"
+      custom_fields: "{{ netbox_ipam_role.custom_fields | default(omit) }}"
+      tags: "{{ netbox_ipam_role.tags | default(omit) }}"
+    state: present
+  register: netbox_ipam_role_result
+
+- name: Show IPAM role result
+  ansible.builtin.debug:
+    var: netbox_ipam_role_result

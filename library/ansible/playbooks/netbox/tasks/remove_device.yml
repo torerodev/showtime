@@ -1,0 +1,20 @@
+---
+- name: Ensure required device parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_device.name is defined
+    fail_msg: "Missing required device parameters"
+
+- name: Remove device from NetBox
+  netbox.netbox.netbox_device:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_device.name }}"
+    state: absent
+  register: netbox_device_result
+
+- name: Show device removal result
+  ansible.builtin.debug:
+    var: netbox_device_result

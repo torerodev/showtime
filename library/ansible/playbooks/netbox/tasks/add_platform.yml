@@ -1,0 +1,27 @@
+---
+- name: Ensure required platform parameters are provided
+  ansible.builtin.assert:
+    that:
+      - netbox_platform.name is defined
+    fail_msg: "Missing required platform parameters"
+
+- name: Add platform to NetBox
+  netbox.netbox.netbox_platform:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    validate_certs: "{{ netbox_validate_certs | default(false) }}"
+    data:
+      name: "{{ netbox_platform.name }}"
+      
+      slug: "{{ netbox_platform.slug | default(netbox_platform.name | lower | replace(' ', '-')) }}"
+      manufacturer: "{{ netbox_platform.manufacturer | default(omit) }}"
+      description: "{{ netbox_platform.description | default(omit) }}"
+      
+      custom_fields: "{{ netbox_platform.custom_fields | default(omit) }}"
+      tags: "{{ netbox_platform.tags | default(omit) }}"
+    state: present
+  register: netbox_platform_result
+
+- name: Show platform result
+  ansible.builtin.debug:
+    var: netbox_platform_result
