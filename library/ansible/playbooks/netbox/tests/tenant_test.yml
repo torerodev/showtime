@@ -1,0 +1,9 @@
+---
+netbox_tenants:
+  - name: "Engineering"
+    slug: "engineering"
+    description: "Engineering department"
+    
+  - name: "Operations"
+    slug: "operations"
+    description: "Operations team"
