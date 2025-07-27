@@ -1,0 +1,40 @@
+---
+netbox_sites:
+  - name: "Lab Site"
+    slug: "lab-site"
+    status: "active"
+    description: "Laboratory testing site"
+
+netbox_tenants:
+  - name: "Engineering"
+    slug: "engineering"
+    description: "Engineering department"
+
+netbox_vrfs:
+  - name: "mgmt-vrf"
+    rd: "65000:100"
+    tenant: "Engineering"
+    description: "Management VRF"
+
+netbox_vlans:
+  - name: "Management"
+    vid: 100
+    site: "Lab Site"
+    tenant: "Engineering"
+    status: "active"
+    description: "Management VLAN"
+
+netbox_prefixes:
+  - prefix: "10.1.100.0/24"
+    site: "Lab Site"
+    tenant: "Engineering"
+    vrf: "mgmt-vrf"
+    vlan: "Management"
+    status: "active"
+    description: "Management network prefix"
+    
+  - prefix: "192.168.1.0/24"
+    site: "Lab Site"
+    tenant: "Engineering"
+    status: "active"
+    description: "Lab network prefix"
