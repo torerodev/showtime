@@ -1,0 +1,16 @@
+---
+netbox_tags:
+  - name: "production"
+    slug: "production"
+    color: "ff0000"
+    description: "Production environment"
+    
+  - name: "staging"
+    slug: "staging"
+    color: "ffaa00"
+    description: "Staging environment"
+    
+  - name: "development"
+    slug: "development"
+    color: "00ff00"
+    description: "Development environment"
