@@ -12,7 +12,7 @@
     validate_certs: "{{ netbox_validate_certs | default(false) }}"
     data:
       asn: "{{ netbox_bgp_asn.asn }}"
-      rir: "{{ netbox_bgp_asn.rir | default('PRIVATE') }}"
+      rir: "{{ netbox_bgp_asn.rir }}"
       
       tenant: "{{ netbox_bgp_asn.tenant | default(omit) }}"
       description: "{{ netbox_bgp_asn.description | default(omit) }}"
