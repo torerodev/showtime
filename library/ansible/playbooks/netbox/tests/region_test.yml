@@ -1,0 +1,9 @@
+---
+netbox_regions:
+  - name: "North America"
+    slug: "north-america"
+    description: "North American region"
+    
+  - name: "Europe"
+    slug: "europe"
+    description: "European region"
