@@ -1,0 +1,11 @@
+---
+- name: Backup Arista Configuration
+  hosts: "{{ target | default('all') }}"
+  gather_facts: false
+  
+  vars:
+    default_backup_dir: "{{ lookup('env', 'HOME') }}/config_backups"
+    
+  tasks:
+    - name: Backup EOS configuration
+      include_tasks: "tasks/backup_config.yml"
