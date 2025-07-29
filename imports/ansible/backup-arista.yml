@@ -1,0 +1,28 @@
+---
+repositories:
+    - name: showtime
+      description: Automation Library
+      url: https://github.com/torerodev/showtime.git
+      reference: main
+      tags:
+        - lab
+        - torero
+
+services:
+    - name: backup-arista
+      type: ansible-playbook
+      description: Ansible playbook to backup Arista configurations
+      working-directory: library/ansible
+      playbooks:
+        - playbooks/arista/backup-arista.yml
+      repository: showtime
+      runtime:
+        inventory:
+          - inventory/backup_arista.yml
+      tags:
+        - arista
+        - backup
+        - layer3
+        - vxlan
+        - bgp
+...
