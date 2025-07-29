@@ -14,7 +14,7 @@ services:
       description: Ansible playbook to backup Arista configurations
       working-directory: library/ansible
       playbooks:
-        - playbooks/arista/backup-arista.yml
+        - playbooks/arista/backup_arista.yml
       repository: showtime
       runtime:
         inventory:
