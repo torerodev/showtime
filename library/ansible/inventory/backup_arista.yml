@@ -14,15 +14,15 @@ all:
     arista:
       hosts:
         spine1:
-          ansible_host: 172.20.20.11
+          ansible_host: 198.18.1.11
         spine2:
-          ansible_host: 172.20.20.12
+          ansible_host: 198.18.1.12
         leaf1:
-          ansible_host: 172.20.20.21
+          ansible_host: 198.18.1.21
         leaf2:
-          ansible_host: 172.20.20.22
+          ansible_host: 198.18.1.22
         leaf3:
-          ansible_host: 172.20.20.23
+          ansible_host: 198.18.1.23
         leaf4:
-          ansible_host: 172.20.20.24
+          ansible_host: 198.18.1.24
 ...
