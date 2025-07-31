@@ -16,7 +16,12 @@ Finding examples of automation is great, but doesn't get you very far unless you
 - [Network OS Images](https://containerlab.dev/manual/kinds/) - network operating system images _(e.g., Cisco, Arista, Juniper, Nokia)_ required to run Containerlab topologies. You must obtain these images directly from the respective vendors, as they are not provided by Containerlab or Itential due to licensing restrictions. You will need to follow different steps for downloading and importing these images depending on the vendor.
 
 ## 🚀 Getting Started
-Let's start out with running a basic lab to demonstrate backing up _configuration_ from an Arista device.
+Let's start out with running a basic lab to demonstrate backing up _configuration_ from an Arista device. Now, we could just configure a single _Arista_ node and backup the configuration, but where is the fun in that? This lab in particular, provisions a Layer 3 Spine-Leaf topology with BGP _EVPN-VXLAN_ overlay for multi-tenant network segmentation.
+- 2 spine switches and 4 leafs
+- Layer 3 routed links between spine and leaf switches with **/31** subnets
+- BGP for underlay _(IPv4)_ and overlay _(EVPN)_ routing
+- VXLAN configuration with **VNIs** for VLAN bridging and L3 VRF routing
+- ECMP load balancing across spine switches
 
 ![topology](./img/topology.png)
 
