@@ -9,7 +9,6 @@ topology:
   kinds:
     arista_ceos:
       image: ceos:${CEOS_VERSION:=4.34.1F}
-
   
   nodes:
     agw:
@@ -17,10 +16,10 @@ topology:
       image: ghcr.io/torerodev/torero-container:${TORERO_VERSION:=latest}
       mgmt-ipv4: 198.18.1.5
       # ports:
-      #   - "8001:8000"
+      #   - "8000:8000"
       #   - "8080:8080"
       env:
-        ENABLE_SSH_ADMIN: "true"
+        # ENABLE_SSH_ADMIN: "true"
         # ENABLE_API: "true"
         # ENABLE_MCP: "true"
       binds:
