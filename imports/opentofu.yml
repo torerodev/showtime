@@ -1,0 +1,22 @@
+---
+repositories:
+    - name: showtime
+      description: Automation Library
+      url: https://github.com/torerodev/showtime.git
+      reference: lab/opentofu-runner
+      tags:
+        - lab
+        - torero
+
+services:
+    - name: aws-state-backend
+      type: opentofu-plan
+      description: AWS state backend
+      working-directory: library/opentofu/aws-state-backend
+      repository: showtime
+      tags:
+        - aws
+        - dynamodb
+        - opentofu
+        - s3
+...
