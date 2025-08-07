@@ -3,7 +3,6 @@ repositories:
     - name: showtime
       description: Automation Library
       url: https://github.com/torerodev/showtime.git
-      reference: lab/opentofu-runner
       tags:
         - lab
         - torero
@@ -19,4 +18,5 @@ services:
         - dynamodb
         - opentofu
         - s3
+        - state
 ...
