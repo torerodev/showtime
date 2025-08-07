@@ -1,0 +1,27 @@
+---
+name: cloud-runner
+
+mgmt:
+  network: cloud-runner
+  ipv4-subnet: 198.18.1.0/24
+
+topology:
+  nodes:
+    agw:
+      kind: linux
+      image: ghcr.io/torerodev/torero-container:${TORERO_VERSION:=latest}
+      mgmt-ipv4: 198.18.1.5
+      # ports:
+      #   - "8000:8000"
+      #   - "8080:8080"
+      env:
+        ENABLE_SSH_ADMIN: "true"
+        # ENABLE_API: "true"
+        # ENABLE_MCP: "true"
+        INSTALL_OPENTOFU: "true"
+        OPENTOFU_VERSION: "1.9.0"
+      binds:
+        - $PWD/data:/home/admin/data
+      exec:
+        - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/opentofu.yml"
+...
