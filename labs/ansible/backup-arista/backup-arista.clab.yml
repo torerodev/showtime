@@ -15,15 +15,30 @@ topology:
       kind: linux
       image: ghcr.io/torerodev/torero-container:${TORERO_VERSION:=latest}
       mgmt-ipv4: 198.18.1.5
-      # ports:
-      #   - "8000:8000"
-      #   - "8080:8080"
+      ports:
+        - "22:22"
+        - "8000:8000"
+        - "8001:8001"
+        - "8080:8080"
       env:
-        # ENABLE_SSH_ADMIN: "true"
-        # ENABLE_API: "true"
-        # ENABLE_MCP: "true"
+
+        # enable api
+        ENABLE_API: true
+        API_PORT: 8000
+
+        # enable ui
+        ENABLE_UI: true
+        UI_PORT: 8001
+        UI_REFRESH_INTERVAL: 10
+
+        # enable mcp
+        ENABLE_MCP: true
+        MCP_PORT: 8080
+
+        # enable ssh admin for testing
+        ENABLE_SSH_ADMIN: true
       binds:
-        - $PWD/data:/home/admin/data
+        - ./data:/home/admin/data
       exec:
         - "runuser -u admin -- torero db import --repository https://github.com/torerodev/showtime.git imports/ansible/backup-arista.yml"
 
