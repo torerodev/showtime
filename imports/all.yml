@@ -8,6 +8,14 @@ repositories:
         - lab
         - torero
 
+    - name: hello-torero
+      description: Get started with torero
+      url: https://github.com/torerodev/hello-torero.git
+      reference: main
+      tags:
+        - demo
+        - torero
+
 services:
     - name: backup-arista
       type: ansible-playbook
@@ -25,4 +33,57 @@ services:
         - layer3
         - vxlan
         - bgp
+
+    - name: aws-state-backend
+      type: opentofu-plan
+      description: AWS state backend
+      working-directory: library/opentofu/aws-state-backend
+      repository: showtime
+      tags:
+        - aws
+        - dynamodb
+        - opentofu
+        - s3
+        - state
+
+    - name: arista-eos-bgp-basic
+      type: python-script
+      description: Python script to configure BGP on Arista EOS devices
+      working-directory: library/python/arista-eos-bgp-basic
+      filename: arista-eos-bgp-basic.py
+      repository: showtime
+      tags:
+        - arista-eos-bgp-basic
+      runtime:
+        req-file: pyproject.toml
+
+    - name: hello-ansible
+      type: ansible-playbook
+      description: Ansible hello world
+      working-directory: hello-ansible
+      playbooks:
+        - hello-ansible.yml
+      repository: hello-torero
+      tags:
+        - demo
+        - ansible
+
+    - name: hello-python
+      type: python-script
+      description: Python hello world
+      filename: hello-python.py
+      working-directory: hello-python
+      repository: hello-torero
+      tags:
+        - demo
+        - python
+
+    - name: hello-opentofu
+      type: opentofu-plan
+      description: OpenTOFU hello world
+      working-directory: hello-opentofu
+      repository: hello-torero
+      tags:
+        - demo
+        - opentofu
 ...
