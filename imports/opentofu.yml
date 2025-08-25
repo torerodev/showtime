@@ -8,10 +8,10 @@ repositories:
         - torero
 
 services:
-    - name: aws-state-backend
+    - name: state-backend
       type: opentofu-plan
       description: AWS state backend
-      working-directory: library/opentofu/aws-state-backend
+      working-directory: library/opentofu/state-backend
       repository: showtime
       tags:
         - aws
@@ -19,4 +19,15 @@ services:
         - opentofu
         - s3
         - state
+      
+    - name: aws-vpc
+      type: opentofu-plan
+      description: AWS VPC
+      working-directory: library/opentofu/aws-vpc
+      repository: showtime
+      tags:
+        - aws
+        - network
+        - opentofu
+        - vpc
 ...
