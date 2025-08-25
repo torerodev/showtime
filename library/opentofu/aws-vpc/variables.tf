@@ -19,13 +19,13 @@ variable "aws_region" {
 variable "vpc_cidr_block" {
   description = "CIDR block for VPC"
   type        = string
-  default     = "10.250.0.0/24"
+  default     = "10.250.0.0/20"
 }
 
 variable "vpc_name" {
   description = "Name of the VPC"
   type        = string
-  default     = "vpc-torero-showtime"
+  default     = "vpc-showtime"
 }
 
 variable "subnet_cidrs" {
