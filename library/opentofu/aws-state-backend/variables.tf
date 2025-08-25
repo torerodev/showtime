@@ -25,7 +25,7 @@ variable "project_name" {
 variable "bucket_name" {
   description = "Unique name for the S3 bucket"
   type        = string
-  default     = "torero-showtime-backend"
+  default     = "torero-showtime-bucket"
 }
 
 variable "dynamodb_table_name" {
