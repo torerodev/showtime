@@ -11,15 +11,17 @@ topology:
       kind: linux
       image: ghcr.io/torerodev/torero-container:${TORERO_VERSION:=latest}
       mgmt-ipv4: 198.18.1.5
-      # ports:
-      #   - "8000:8000"
-      #   - "8080:8080"
+      ports:
+        - "22:22"
+        - "8000:8000"
+        - "8001:8001"
+        - "8080:8080"
       env:
+        ENABLE_UI: "true"
+        UI_PORT: "8001"
+        UI_REFRESH_INTERVAL: "15"
+        ENABLE_MCP: "true"
         ENABLE_SSH_ADMIN: "true"
-        # ENABLE_API: "true"
-        # ENABLE_MCP: "true"
-        INSTALL_OPENTOFU: "true"
-        OPENTOFU_VERSION: "1.9.0"
       binds:
         - $PWD/data:/home/admin/data
       exec:
