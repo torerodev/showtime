@@ -31,10 +31,10 @@ services:
         - opentofu
         - vpc
       secrets:
-        - name: aws-access-key
+        - name: tf-var-aws-access-key
           type: env
           target: TF_VAR_aws_access_key
-        - name: aws-secret-key
+        - name: tf-var-aws-secret-key
           type: env
           target: TF_VAR_aws_secret_key
         - name: aws-access-key-id
